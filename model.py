@@ -36,8 +36,15 @@ def linear_projection(x, weight, bias):
     # TODO: compute the affine map y = x @ weight.T + bias
     return x @ weight.T + bias
 
-# Step 4 - project_patches_to_embeddings (not yet solved)
-# TODO: implement
+# Step 4 - project_patches_to_embeddings
+import torch
+
+def project_patches_to_embeddings(flat_patches, patch_proj_weight, patch_proj_bias):
+    # TODO: Linearly project flattened image patches into the ViT embedding dimension.
+    # flat_patches: [bs, num_patches, dim]
+    # patch_proj_weight.T: [dim, dim2]
+    # patch_proj_bias: [dim2]
+    return linear_projection(flat_patches, patch_proj_weight, patch_proj_bias)
 
 # Step 5 - prepend_class_token (not yet solved)
 # TODO: implement
