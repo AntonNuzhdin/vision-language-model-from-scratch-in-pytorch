@@ -15,12 +15,10 @@ def split_image_into_patches(image, patch_size):
     Returns a tensor of shape (B, num_patches, C, patch_size, patch_size) in row-major order.
     """
     # TODO: split the (B, C, H, W) image into (B, num_patches, C, patch_size, patch_size).
-    b, c, h, w = image.shape
-    n_h = h // patch_size
-    n_w = w // patch_size
-
-    image = image.reshape(b, c, n_h, patch_size, n_w, patch_size).permute(0, 2, 4, 1, 3, 5)
-    image = image.reshape(b, -1, c, patch_size, patch_size)
+    image = image.unfold(2, patch_size, patch_size) # [B, C, n_h, W, patch_size]
+    image = image.unfold(3, patch_size, patch_size) # [B, C, n_h, n_w, patch_size, patch_size]
+    b, c, n_h, n_w, _, _ = image.shape
+    image = image.reshape(b, c, -1, patch_size, patch_size).transpose(1, 2)
     return image
 
 # Step 2 - flatten_patches (not yet solved)
