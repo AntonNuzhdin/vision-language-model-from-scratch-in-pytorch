@@ -139,17 +139,41 @@ def scaled_dot_product_attention(q, k, v, mask=None):
     attn = attn_weights @ v
     return attn
 
-# Step 13 - split_into_heads (not yet solved)
-# TODO: implement
+# Step 13 - split_into_heads
+import torch
 
-# Step 14 - merge_heads (not yet solved)
-# TODO: implement
+def split_into_heads(x, num_heads):
+    """Reshape (B, S, d_model) into (B, num_heads, S, d_head)."""
+    # TODO: split the last dim into (num_heads, d_head) and move heads next to batch
+    b, s, d_model = x.shape
+    x = x.reshape(b, s, num_heads, -1).permute(0, 2, 1, 3)
+    return x
 
-# Step 15 - project_qkv (not yet solved)
-# TODO: implement
+# Step 14 - merge_heads
+import torch
 
-# Step 16 - split_qkv_into_heads (not yet solved)
-# TODO: implement
+def merge_heads(x):
+    """Merge (B, num_heads, S, d_head) back to (B, S, num_heads*d_head)."""
+    # TODO: merge the multi-head dimension back into the model dimension
+    b, nh, s, d_head = x.shape
+    x = x.permute(0, 2, 1, 3).reshape(b, s, -1)
+    return x
+
+# Step 15 - project_qkv
+def project_qkv(x, wq, bq, wk, bk, wv, bv):
+    # TODO: project x into separate query, key, and value tensors using three linear layers.
+    q = linear_projection(x, wq, bq)
+    k = linear_projection(x, wk, bk)
+    v = linear_projection(x, wv, bv)
+    return q, k, v
+
+# Step 16 - split_qkv_into_heads
+import torch
+
+def split_qkv_into_heads(q, k, v, num_heads):
+    # TODO: reshape q, k, v from (B, S, d_model) into (B, num_heads, S, d_head) each
+    q, k, v = split_into_heads(q, num_heads), split_into_heads(k, num_heads), split_into_heads(v, num_heads)
+    return q, k, v
 
 # Step 17 - multi_head_attention_scores (not yet solved)
 # TODO: implement
